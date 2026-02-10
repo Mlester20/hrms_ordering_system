@@ -1,9 +1,6 @@
 <?php
-session_start();
 
-    if(!isset($_SESSION['user_id'])){
-        header("Location: ../index.php");
-    }
+require_once '../controllers/ordersController.php';
 
 ?>
 
@@ -21,8 +18,11 @@ session_start();
     <!-- header -->
     <?php require '../components/user_header.php';?>
     
+
     <!-- orders component card -->
     <?php require '../components/ordersCard.php';?>
 
+
+    <script src="../js/orderCardModal.js"></script>
 </body>
 </html>

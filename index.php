@@ -1,88 +1,203 @@
+<?php
+require_once 'includes/flashMessages.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | <?php require 'includes/title.php'; ?></title>
+    <title>Login - POS System</title>
     <link rel="stylesheet" href="dist/output.css">
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #141937;
+            --bg-card: #1a1f3a;
+            --accent-blue: #00d4ff;
+            --accent-cyan: #00bcd4;
+            --accent-purple: #6b5ce7;
+            --text-primary: #ffffff;
+            --text-secondary: #8b92b8;
+            --success: #00ff88;
+            --warning: #ffb800;
+            --danger: #ff4757;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .login-card {
+            background: var(--bg-card);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15), 0 0 80px rgba(107, 92, 231, 0.1);
+        }
+        
+        .input-field {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(139, 146, 184, 0.2);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+        
+        .input-field::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-cyan) 100%);
+            color: var(--bg-primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            background: rgba(255, 71, 87, 0.1);
+            border-left: 3px solid var(--danger);
+            color: var(--danger);
+        }
+        
+        .checkbox-custom {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(139, 146, 184, 0.3);
+            border-radius: 4px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-custom:checked {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+        
+        .checkbox-custom:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--bg-primary);
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .password-toggle {
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .password-toggle:hover {
+            color: var(--accent-blue);
+        }
+        
+        .loading-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid var(--text-primary);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
-    
-    <div class="w-full max-w-md">
-        <!-- Login Card -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <!-- Header Section -->
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white text-center">
-                <h1 class="text-2xl font-bold mb-1">Welcome Back</h1>
-            </div>
-
-            <!-- Form Section -->
-            <div class="p-8">
-                <form action="controllers/auth.php" method="POST" class="space-y-6">
-                    <!-- Email Field -->
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                            Email Address
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
-                                </svg>
-                            </div>
-                            <input type="email" id="email" name="email" required
-                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-                                placeholder="you@example.com">
-                        </div>
-                    </div>
-
-                    <!-- Password Field -->
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                            Password
-                        </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                </svg>
-                            </div>
-                            <input type="password" id="password" name="password" required
-                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-                                placeholder="••••••••">
-                        </div>
-                    </div>
-
-                    <!-- Remember Me & Forgot Password -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input id="remember" name="remember" type="checkbox"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                            <label for="remember" class="ml-2 block text-sm text-gray-700">
-                                Remember me
-                            </label>
-                        </div>
-                        <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500 transition duration-150">
-                            Forgot password?
-                        </a>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit"
-                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition duration-150 hover:scale-105 shadow-lg">
-                        Sign In
-                    </button>
-                </form>
-            </div>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="login-card w-full max-w-md rounded-2xl p-8 md:p-10">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2 glow-text" style="color: var(--text-primary);">
+                Welcome Back
+            </h1>
+            <p class="text-base" style="color: var(--text-secondary);">
+                Sign in to start your session
+            </p>
         </div>
-
-        <!-- Footer Text -->
-        <p class="mt-6 text-center text-xs text-gray-600">
-            By signing in, you agree to our 
-            <a href="#" class="text-blue-600 hover:underline">Terms of Service</a> and 
-            <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>
-        </p>
+        
+        <!-- message -->
+        <?php showFlash(); ?>
+        
+        <!-- Login Form -->
+        <form method="POST" action="controllers/auth.php" class="space-y-6">
+            <!-- Username/Email Field -->
+            <div>
+                <label for="username" class="block text-sm font-medium mb-2" style="color: var(--text-primary);">
+                    Username or Email
+                </label>
+                <input 
+                    type="email" 
+                    id="username" 
+                    name="email" 
+                    class="input-field w-full px-4 py-3 rounded-lg text-base"
+                    placeholder="Enter your username or email"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+            
+            <!-- Password Field -->
+            <div>
+                <label for="password" class="block text-sm font-medium mb-2" style="color: var(--text-primary);">
+                    Password
+                </label>
+                <div class="relative">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="input-field w-full px-4 py-3 rounded-lg text-base pr-12"
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <button 
+                        type="button" 
+                        class="password-toggle absolute right-4 top-1/2 transform -translate-y-1/2"
+                        onclick="togglePassword()"
+                        aria-label="Toggle password visibility"
+                    >
+                    </button>
+                </div>
+            </div>
+            
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn-primary w-full py-3 px-6 rounded-lg text-base font-semibold flex items-center justify-center">
+                Login
+            </button>
+        </form>
     </div>
+    
 
 </body>
 </html>

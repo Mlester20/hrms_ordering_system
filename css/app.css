@@ -12,32 +12,229 @@
     --danger: #ff4757;
 }
 
-*{
-    color: var(--text-primary);
-}
-
 body {
-    background: var(--bg-primary);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-.card{
+/* Backgrounds */
+.bg-primary {
     background-color: var(--bg-primary);
 }
 
-.group:hover .group-hover\:opacity-100 {
-  animation: slideDown 0.2s ease-out;
+.bg-secondary {
+    background-color: var(--bg-secondary);
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.bg-card {
+    background-color: var(--bg-card);
 }
+
+/* Text */
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.text-accent-cyan {
+    color: var(--accent-cyan);
+}
+
+.text-danger {
+    color: var(--danger);
+}
+
+/* Accents */
+.accent-cyan {
+    background-color: var(--accent-cyan);
+}
+
+.bg-danger {
+    background-color: var(--danger);
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 0.5rem;
+    background-color: var(--bg-card);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+    z-index: 50;
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown-menu:hover {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--bg-secondary);
+}
+
+.dropdown-menu a:first-child {
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.dropdown-menu a:last-child {
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.dropdown-menu .divider {
+    height: 1px;
+    background-color: var(--bg-secondary);
+    margin: 0.5rem 0;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal.active {
+    display: flex;
+}
+
+/* Buttons */
+.btn-cyan {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+    transition: all 0.3s ease;
+}
+
+.btn-cyan:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4);
+}
+
+/* Table */
+.table-row:hover {
+    background-color: rgba(0, 212, 255, 0.05);
+}
+
+/* Form Inputs */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+/* Toast Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-fade-out {
+    animation: fadeOut 0.3s ease-out;
+}
+
+/* Hover effect for cards */
+.hover\:bg-gray-750:hover {
+    background-color: #2d3748;
+}
+
+/* Smooth transitions */
+.transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Toast Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-fade-out {
+    animation: fadeOut 0.3s ease-out;
+}
+
+/* Hover effects for cards */
+.hover\:bg-gray-750:hover {
+    background-color: #2d3748;
+}
+
+.hover\:bg-gray-700:hover {
+    background-color: #374151;
+}
+
+/* Smooth transitions */
+.transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
