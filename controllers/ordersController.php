@@ -1,7 +1,7 @@
 <?php
 // Error handling for JSON responses
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // Don't display errors to browser
+ini_set('display_errors', 0);
 
 session_start();
 
@@ -12,7 +12,6 @@ $ordersModel = new ordersModel();
 
 // Handle AJAX requests for updating order status
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    // Start output buffering to catch any errors
     ob_start();
     
     try {
@@ -22,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $order_id = intval($_POST['order_id']);
             $new_status = $_POST['status'];
             
-            // Validate status
             $valid_statuses = ['pending', 'preparing', 'ready', 'delivered', 'cancelled'];
             if (!in_array($new_status, $valid_statuses)) {
                 throw new Exception('Invalid status');
@@ -30,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             
             $result = $ordersModel->updateOrderStatus($con, $order_id, $new_status);
             
-            // Clean output buffer
             ob_clean();
             
             if ($result) {
@@ -64,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 }
             }
             
-            // Clean output buffer
             ob_clean();
             
             if ($order) {
@@ -82,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             exit;
         }
         
-        // Unknown action
         ob_clean();
         echo json_encode([
             'success' => false,
@@ -91,7 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         exit;
         
     } catch (Exception $e) {
-        // Clean output buffer and return error
         ob_clean();
         echo json_encode([
             'success' => false,
@@ -101,13 +95,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
-// Get all orders for display
+// Get filter status from URL parameter, default to 'pending'
+$filterStatus = isset($_GET['status']) ? $_GET['status'] : 'pending';
+$valid_statuses = ['all', 'pending', 'preparing', 'ready', 'delivered', 'cancelled'];
+
+// Validate status
+if (!in_array($filterStatus, $valid_statuses)) {
+    $filterStatus = 'pending';
+}
+
+// Get orders based on filter
 try {
-    $orders = $ordersModel->getAllOrders($con);
+    if ($filterStatus === 'all') {
+        $orders = $ordersModel->getAllOrders($con);
+    } else {
+        $orders = $ordersModel->getOrdersByStatus($con, $filterStatus);
+    }
+    
+    // Get counts for each status
+    $statusCounts = [];
+    $allStatuses = ['pending', 'preparing', 'ready', 'delivered', 'cancelled'];
+    foreach ($allStatuses as $status) {
+        $result = $ordersModel->getOrdersByStatus($con, $status);
+        $statusCounts[$status] = $result ? $result->num_rows : 0;
+    }
+    $allOrders = $ordersModel->getAllOrders($con);
+    $statusCounts['all'] = $allOrders ? $allOrders->num_rows : 0;
+    
 } catch (Exception $e) {
-    // Log error but don't break the page
     error_log('Error fetching orders: ' . $e->getMessage());
     $orders = null;
+    $statusCounts = ['all' => 0, 'pending' => 0, 'preparing' => 0, 'ready' => 0, 'delivered' => 0, 'cancelled' => 0];
 }
 
 ?>

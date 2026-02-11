@@ -73,7 +73,7 @@ class ordersModel{
         return $result->fetch_assoc();
     }
     
-    // Get orders by status
+    // Get orders by status - FIXED VERSION
     public function getOrdersByStatus($con, $status) {
         $query = "SELECT 
                     o.order_id,
@@ -84,8 +84,10 @@ class ordersModel{
                     o.payment_status,
                     o.special_instructions,
                     o.ordered_at,
+                    o.delivered_at,
                     u.name AS customer_name,
-                    u.room_number AS user_room
+                    u.address,
+                    u.email
                   FROM orders o
                   INNER JOIN users u ON o.user_id = u.user_id
                   WHERE o.order_status = ?
