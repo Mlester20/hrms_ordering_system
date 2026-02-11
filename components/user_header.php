@@ -11,7 +11,7 @@
       <!-- Navigation Links -->
       <div class="hidden md:flex items-center space-x-8">
         <a href="home.php" style="color: var(--text-secondary); transition: color 0.2s;" onmouseover="this.style.color='var(--accent-blue)'" onmouseout="this.style.color='var(--text-secondary)'">Home</a>
-        <a href="#" style="color: var(--text-secondary); transition: color 0.2s;" onmouseover="this.style.color='var(--accent-blue)'" onmouseout="this.style.color='var(--text-secondary)'">Menu</a>
+        <a href="menus.php" style="color: var(--text-secondary); transition: color 0.2s;" onmouseover="this.style.color='var(--accent-blue)'" onmouseout="this.style.color='var(--text-secondary)'">Menu</a>
         <a href="#" style="color: var(--text-secondary); transition: color 0.2s;" onmouseover="this.style.color='var(--accent-blue)'" onmouseout="this.style.color='var(--text-secondary)'">Orders</a>
       </div>
 
