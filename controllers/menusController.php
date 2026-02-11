@@ -1,70 +1,76 @@
 <?php
-require '../includes/config.php'; // your DB connection
+session_start();
+
+require_once '../includes/config.php'; 
+require_once '../models/menusModel.php';
+require_once '../includes/flashMessages.php';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$action = $_GET['action'] ?? '';
+$menu = new menusModel();
+$menus = $menu->getMenus($con);
 
-try {
-    // ADD MENU
-    if ($action === 'create' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $menu_name   = $_POST['menu_name'];
-        $category    = $_POST['category'];
-        $price       = $_POST['price'];  // can be string for DECIMAL
-        $description = $_POST['description'];
-        $status      = $_POST['status'];
+// Check if there's an action parameter
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
 
-        $stmt = $con->prepare("INSERT INTO menus (menu_name, category, price, description, status) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $menu_name, $category, $price, $description, $status);
-        $stmt->execute();
-
-        echo "Menu added successfully!";
-
-    }
-    // EDIT MENU
-    elseif ($action === 'edit' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $menu_id     = $_POST['menu_id'];
-        $menu_name   = $_POST['menu_name'];
-        $category    = $_POST['category'];
-        $price       = $_POST['price'];
-        $description = $_POST['description'];
-        $status      = $_POST['status'];
-
-        $stmt = $con->prepare("UPDATE menus SET menu_name=?, category=?, price=?, description=?, status=? WHERE menu_id=?");
-        $stmt->bind_param("sssssi", $menu_name, $category, $price, $description, $status, $menu_id);
-        $stmt->execute();
-
-        echo "Menu updated successfully!";
-    }
-    // DELETE MENU
-    elseif ($action === 'delete' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $menu_id = $_POST['menu_id'];
-
-        $stmt = $con->prepare("DELETE FROM menus WHERE menu_id=?");
-        $stmt->bind_param("i", $menu_id);
-        $stmt->execute();
-
-        echo "Menu deleted successfully!";
-    }
-    // GET MENU (for edit modal)
-    elseif ($action === 'get' && isset($_GET['menu_id'])) {
-        $menu_id = $_GET['menu_id'];
-
-        $stmt = $con->prepare("SELECT * FROM menus WHERE menu_id=?");
-        $stmt->bind_param("i", $menu_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $menu = $result->fetch_assoc();
-
+    // Handle GET request for fetching single menu (for edit modal)
+    if ($action === 'get' && isset($_GET['menu_id'])) {
         header('Content-Type: application/json');
-        echo json_encode($menu);
+        $menu_id = $_GET['menu_id'];
+        // You'll need to add a getMenuById method in your model
+        $menuData = $menu->getMenuById($con, $menu_id);
+        echo json_encode($menuData);
+        exit();
     }
-    else {
-        echo "Invalid action!";
+
+    // Handle POST requests
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+        if ($action === 'create') {
+            $menu_name = $_POST['menu_name'];
+            $category = $_POST['category'];
+            $price = $_POST['price'];
+            $description = $_POST['description'];
+            $status = $_POST['status'];
+
+            if ($menu->addMenus($con, $menu_name, $category, $price, $description, $status)) {
+                setFlash("success", "Menu Added Successfully!");
+            } else {
+                setFlash("error", "Error Adding Menu");
+            }
+            header("Location: ../admin/menus.php");
+            exit();
+        }
+
+        if ($action === 'edit') {
+            $menu_id = $_POST['menu_id'];
+            $menu_name = $_POST['menu_name'];
+            $category = $_POST['category'];
+            $price = $_POST['price'];
+            $description = $_POST['description'];
+            $status = $_POST['status'];
+
+            if ($menu->editMenus($con, $menu_id, $menu_name, $category, $price, $description, $status)) {
+                setFlash("success", "Menu Updated Successfully!");
+            } else {
+                setFlash("error", "Error Updating Menu");
+            }
+            header("Location: ../admin/menus.php");
+            exit();
+        }
+
+        if ($action === 'delete') {
+            $menu_id = $_POST['menu_id'];
+            
+            if ($menu->deleteMenus($con, $menu_id)) {
+                setFlash("success", "Menu Deleted Successfully!");
+            } else {
+                setFlash("error", "Error Deleting Menu");
+            }
+            header("Location: ../admin/menus.php");
+            exit();
+        }
     }
-} catch (mysqli_sql_exception $e) {
-    echo "Database error: " . $e->getMessage();
-} finally {
-    if (isset($stmt)) $stmt->close();
-    $db->closeConnection();
 }
+?>

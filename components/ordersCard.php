@@ -8,7 +8,7 @@
         foreach($nameParts as $part) {
             $initials .= strtoupper(substr($part, 0, 1));
         }
-        
+
         // Determine status color and label
         $statusColors = [
             'pending' => 'bg-yellow-600',

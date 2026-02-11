@@ -1,6 +1,9 @@
 <?php
-session_start();
-require '../includes/config.php';
+
+require_once '../includes/config.php';
+require_once '../controllers/menusController.php';
+require_once '../includes/flashMessages.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +32,8 @@ require '../includes/config.php';
       </button>
     </div>
 
+    <?php showFlash(); ?>
+
     <!-- Table -->
     <div class="bg-card rounded-xl shadow-2xl overflow-hidden">
       <table class="w-full">
@@ -44,9 +49,7 @@ require '../includes/config.php';
         </thead>
         <tbody class="divide-y divide-gray-700">
           <?php
-          // Fetch all menus dynamically
-          $result = $con->query("SELECT * FROM menus ORDER BY menu_id ASC");
-          while ($menu = $result->fetch_assoc()):
+              foreach($menus as $menu):
           ?>
           <tr class="table-row transition-colors" data-menu-id="<?= $menu['menu_id'] ?>">
             <td class="px-6 py-4 text-secondary">#<?= str_pad($menu['menu_id'], 3, '0', STR_PAD_LEFT) ?></td>
@@ -65,7 +68,7 @@ require '../includes/config.php';
               <button onclick="deleteMenu(<?= $menu['menu_id'] ?>)" class="bg-danger text-white px-4 py-2 rounded-lg hover:opacity-80 transition-all">Delete</button>
             </td>
           </tr>
-          <?php endwhile; ?>
+          <?php endforeach; ?>
         </tbody>
       </table>
     </div>
@@ -124,7 +127,7 @@ require '../includes/config.php';
         <!-- Modal Footer -->
         <div class="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-700">
           <button type="button" onclick="closeModal()" class="px-6 py-3 rounded-lg bg-secondary hover:bg-opacity-80 transition-all font-semibold">Cancel</button>
-          <button type="submit" class="btn-cyan px-6 py-3 rounded-lg font-semibold text-white">Save Menu</button>
+          <button type="submit" name="save_menu" class="btn-cyan px-6 py-3 rounded-lg font-semibold text-white">Save Menu</button>
         </div>
       </form>
     </div>
