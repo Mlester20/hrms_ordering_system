@@ -10,15 +10,16 @@ require_once '../includes/flashMessages.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - <?php include '../includes/title.php'; ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Setting | <?php require_once '../includes/title.php'?></title>
+    <link rel="stylesheet" href="../dist/output.css">
     <link rel="stylesheet" href="../css/app.css">
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 </head>
-<body style="background-color: #0a0e27;">
-    <!-- Header -->
-    <?php include '../components/user_header.php'; ?>
+<body>
+    
+    <?php require_once '../components/admin_header.php';?>
 
+    <!-- Main Container -->
     <div class="min-h-screen pt-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto">
 
@@ -134,6 +135,7 @@ require_once '../includes/flashMessages.php';
 
         </div>
     </div>
+
 
 </body>
 </html>

@@ -3,7 +3,7 @@
     class staffsModel{
         public function getStaffs($con){
             try{
-                $query = "SELECT * FROM restaurant_auth ORDER BY user_id DESC";
+                $query = "SELECT * FROM restaurant_auth WHERE role='cashier' ORDER BY user_id DESC";
                 $stmt = $con->prepare($query);
                 $stmt->execute();
                 $result = $stmt->get_result();

@@ -12,7 +12,7 @@
       <div class="hidden md:flex items-center space-x-8">
         <a href="dashboard.php" style="color: var(--text-secondary); transition: color 0.2s;" onmouseover="this.style.color='var(--accent-blue)'" onmouseout="this.style.color='var(--text-secondary)'">Dashboard</a>
         <a href="menus.php" style="color: var(--text-secondary); transition: color 0.2s;" onmouseover="this.style.color='var(--accent-blue)'" onmouseout="this.style.color='var(--text-secondary)'">Menus</a>
-        <a href="staffAccounts.php" style="color: var(--text-secondary); transition: color 0.2s;" onmouseover="this.style.color='var(--accent-blue)'" onmouseout="this.style.color='var(--text-secondary)'">User Accounts</a>
+        <a href="staffAccounts.php" style="color: var(--text-secondary); transition: color 0.2s;" onmouseover="this.style.color='var(--accent-blue)'" onmouseout="this.style.color='var(--text-secondary)'">Staffs Accounts</a>
       </div>
 
       <!-- Right Side: Dropdown Menus & Icons -->
