@@ -161,14 +161,16 @@
                         <div class="flex items-center gap-3">
                             <div id="modalAvatar"
                                 class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                <span class="text-white font-bold" id="modalInitials">AM</span>
+                                <span class="text-white font-bold" id="modalInitials">
+                                    <!-- dynamic content -->
+                                </span>
                             </div>
                             <div class="min-w-0">
                                 <p class="text-white font-medium" id="modalCustomerName">
-                                    Anna Martinez
+                                    <!-- dynamic content -->
                                 </p>
                                 <p class="text-gray-400 text-sm truncate" id="modalCustomerEmail">
-                                    anna.martinez@email.com
+                                    <!-- dynamic content -->
                                 </p>
                             </div>
                         </div>
@@ -236,8 +238,11 @@
                             <option value="cancelled">Cancelled</option>
                         </select>
                     </div>
+                    <!-- Print Receipt -->
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <button id="printReceipt">Print Receipt</button>
+                    </div>
                 </div>
-
             </div>
         </div>
 

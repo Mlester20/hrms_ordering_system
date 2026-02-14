@@ -2,10 +2,8 @@
 session_start();
 
 require_once '../controllers/dashboardData.php';
-
-    if(!isset($_SESSION['user_id'])){
-        header("Location: ../index.php");
-    }
+require_once '../middleware/authMiddleware.php';
+requireAdmin();
 
 ?>
 
