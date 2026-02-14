@@ -24,5 +24,6 @@ require_once '../controllers/ordersController.php';
 
 
     <script src="../js/orderCardModal.js"></script>
+    <script src="../js/order.js"></script>
 </body>
 </html>

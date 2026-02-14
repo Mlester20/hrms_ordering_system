@@ -1,6 +1,6 @@
-// Store order data - this will be populated from PHP
 let orderData = {};
 let currentOrderId = null;
+let currentOrderDetails = null;
 
 // Initialize order data
 function initializeOrderData(data) {
@@ -51,6 +51,12 @@ function loadOrderItems(orderId) {
     fetch(`../controllers/getOrderItems.php?order_id=${orderId}`)
         .then(response => response.json())
         .then(data => {
+            // Store the complete order details for printing
+            currentOrderDetails = {
+                order: orderData[orderId],
+                items: data.items || []
+            };
+            
             const itemsContainer = document.getElementById('modalItems');
             if(data.success && data.items.length > 0) {
                 itemsContainer.innerHTML = data.items.map(item => `
@@ -99,25 +105,3 @@ function updateOrderStatus(newStatus) {
         });
     }
 }
-
-// Initialize event listeners when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Close modal when clicking outside
-    document.getElementById('orderModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
-        }
-    });
-
-    // Close modal with ESC key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
-    });
-
-    // Auto refresh every 30 seconds
-    setInterval(() => {
-        location.reload();
-    }, 30000);
-});
