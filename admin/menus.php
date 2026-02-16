@@ -11,7 +11,7 @@ require_once '../includes/flashMessages.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu Management | <?php require '../includes/title.php' ?></title>
+  <title>Menu Management | <?php require '../includes/title.php';?></title>
   <link rel="stylesheet" href="../dist/output.css">
   <link rel="stylesheet" href="../css/app.css">
   <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
@@ -40,6 +40,7 @@ require_once '../includes/flashMessages.php';
         <thead class="bg-secondary">
           <tr>
             <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">ID</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Image</th>
             <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Menu Name</th>
             <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Category</th>
             <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Price</th>
@@ -53,9 +54,16 @@ require_once '../includes/flashMessages.php';
           ?>
           <tr class="table-row transition-colors" data-menu-id="<?= $menu['menu_id'] ?>">
             <td class="px-6 py-4 text-secondary">#<?= str_pad($menu['menu_id'], 3, '0', STR_PAD_LEFT) ?></td>
+            <td class="px-6 py-4">
+              <?php if (!empty($menu['product_image'])): ?>
+                <img src="../uploads/<?= htmlspecialchars($menu['product_image']) ?>" alt="<?= htmlspecialchars($menu['menu_name']) ?>" class="image-preview">
+              <?php else: ?>
+                <div class="image-preview bg-secondary flex items-center justify-center text-xs text-gray-500">No Image</div>
+              <?php endif; ?>
+            </td>
             <td class="px-6 py-4 font-medium"><?= htmlspecialchars($menu['menu_name']) ?></td>
             <td class="px-6 py-4 text-secondary"><?= ucfirst($menu['category']) ?></td>
-            <td class="px-6 py-4 font-semibold" style="color: var(--success)">$<?= number_format($menu['price'], 2) ?></td>
+            <td class="px-6 py-4 font-semibold" style="color: var(--success)">₱<?= number_format($menu['price'], 2) ?></td>
             <td class="px-6 py-4">
               <?php if ($menu['status'] === 'available'): ?>
                 <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background-color: rgba(0, 255, 136, 0.2); color: var(--success)">Available</span>
@@ -84,7 +92,7 @@ require_once '../includes/flashMessages.php';
       </div>
 
       <!-- Modal Body -->
-      <form id="menuForm" class="p-6">
+      <form id="menuForm" class="p-6" enctype="multipart/form-data">
         <div class="space-y-4">
           <input type="hidden" name="menu_id" id="menuId">
           <div>
@@ -108,6 +116,15 @@ require_once '../includes/flashMessages.php';
               <label class="block text-sm font-semibold mb-2">Price</label>
               <input type="number" name="price" id="price" step="0.01" class="w-full px-4 py-3 rounded-lg bg-secondary border border-gray-700 text-white transition-all" placeholder="0.00" required>
             </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold mb-2">Product Image</label>
+            <input type="file" name="product_image" id="product_image" accept="image/*" class="w-full px-4 py-3 rounded-lg bg-secondary border border-gray-700 text-white transition-all">
+            <div id="imagePreviewContainer" class="mt-2" style="display: none;">
+              <img id="imagePreview" src="" alt="Preview" class="modal-image-preview">
+            </div>
+            <input type="hidden" id="currentImage" name="current_image">
           </div>
 
           <div>

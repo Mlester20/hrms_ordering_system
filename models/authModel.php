@@ -11,7 +11,6 @@ class authModel{
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
                 
-                // Check kung may nakitang user
                 if(mysqli_num_rows($result) > 0){
                     $user = mysqli_fetch_assoc($result);
                     
@@ -22,10 +21,10 @@ class authModel{
                     $_SESSION['logged_in'] = true;
                     
                     mysqli_stmt_close($stmt);
-                    return true; // Success
+                    return true;
                 }else{
                     mysqli_stmt_close($stmt);
-                    return false; // Invalid credentials
+                    return false;
                 }
             }else{
                 throw new Exception("Failed to prepare statement");

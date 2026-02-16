@@ -28,25 +28,50 @@ class menusModel {
         return $result->fetch_assoc();
     }
 
-    public function addMenus($con, $menu_name, $category, $price, $description, $status) {
-        $query = "INSERT INTO menus(menu_name, category, price, description, status) VALUES (?,?,?,?,?)";
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("ssdss", $menu_name, $category, $price, $description, $status);
-        return $stmt->execute();
+    public function addMenus($con, $menu_name, $category, $price, $product_image, $description, $status) {
+        try{
+            $query = "INSERT INTO menus(menu_name, category, price, product_image, description, status) VALUES (?,?,?,?,?,?)";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param("ssdsss", $menu_name, $category, $price, $product_image, $description, $status);
+            return $stmt->execute();
+        }catch(Exception $e){
+            throw new Exception("Error adding menus " . $e->getMessage(),500);
+        }
     }
 
-    public function editMenus($con, $menu_id, $menu_name, $category, $price, $description, $status) {
-        $query = "UPDATE menus SET menu_name = ?, category = ?, price = ?, description = ?, status = ? WHERE menu_id = ?";
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("ssdssi", $menu_name, $category, $price, $description, $status, $menu_id);
-        return $stmt->execute();
+    public function editMenus($con, $menu_id, $menu_name, $category, $price, $product_image, $description, $status) {
+        try{
+            $query = "UPDATE menus SET menu_name = ?, category = ?, price = ?, product_image = ?, description = ?, status = ? WHERE menu_id = ?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param("ssdsssi", $menu_name, $category, $price, $product_image, $description, $status, $menu_id);
+            return $stmt->execute();
+        }catch(Exception $e){
+            throw new Exception("Error editing menus " . $e->getMessage(),500);
+        }
     }
 
     public function deleteMenus($con, $menu_id) {
-        $query = "DELETE FROM menus WHERE menu_id = ?";
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("i", $menu_id);
-        return $stmt->execute();
+        try{
+            // Get the image path before deleting
+            $menuData = $this->getMenuById($con, $menu_id);
+            
+            $query = "DELETE FROM menus WHERE menu_id = ?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param("i", $menu_id);
+            $result = $stmt->execute();
+            
+            // Delete the image file if exists
+            if ($result && !empty($menuData['product_image'])) {
+                $imagePath = "../uploads/" . $menuData['product_image'];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+            
+            return $result;
+        }catch(Exception $e){
+            throw new Exception("Error " . $e->getMessage(), 500);
+        }
     }
 }
 

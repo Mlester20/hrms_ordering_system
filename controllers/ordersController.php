@@ -7,13 +7,12 @@ session_start();
 
 require_once '../includes/config.php';
 require_once '../models/ordersModel.php';
+require_once '../includes/flashMessages.php';
 
 $ordersModel = new ordersModel();
 
-// Handle AJAX requests for updating order status
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     ob_start();
-    
     try {
         header('Content-Type: application/json');
         
